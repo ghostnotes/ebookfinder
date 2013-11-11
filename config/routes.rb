@@ -4,6 +4,13 @@ Ebookfinder::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
+  root 'ebooks#show'
+
+  resources :ebooks, :only => [:show, :search] do
+    collection do
+      get 'search'
+    end
+  end
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
