@@ -1,2 +1,37 @@
-.container
-  %h3= 'EBook Finder'
+.filter
+.navbar.navbar-default.navbar-static-top
+  .navbar-inner
+    .container
+      .brand
+        = 'EBook Finder'
+
+  %br
+
+  .container.text-center
+    = form_tag '/ebooks/search', method: 'post', class: 'form-inline', role: 'form' do
+      = text_field_tag 'title', @search_key, class: 'form-control', placeholder: 'Enter title'
+      = button_tag type: 'submit', class: 'btn-default btn button-search', id: 'search-button' do
+        %i.icon-search
+
+    .container-fluid
+      .row-fluid
+        .span3
+        .span6
+          - if @amazon_response.present? && @amazon_response.items.empty?
+            = show_error_message(@amazon_response)
+
+          %table.table.table-striped{style: 'max-width: 800px'}
+            - unless @amazon_response.nil?
+              - @amazon_response.items.each do |book|
+                - book_attributes = book.get_element('ItemAttributes')
+                - title = book_attributes.get('Title')
+                - img_info = book.get_hash('SmallImage')
+                - author = book_attributes.get('Author')
+                %tr
+                  %td
+                    = link_to image_tag(img_info['URL'], class: 'pull-left book-thumbnail'), book.get('DetailPageURL'), target: '_blank'
+                    %h5= title
+                    = author
+        .span3
+
+  = get_footer_class(@amazon_response)

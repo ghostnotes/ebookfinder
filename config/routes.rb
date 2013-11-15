@@ -8,7 +8,7 @@ Ebookfinder::Application.routes.draw do
 
   resources :ebooks, :only => [:show, :search] do
     collection do
-      get 'search'
+      post 'search'
     end
   end
 
